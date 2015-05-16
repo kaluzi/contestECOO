@@ -1,0 +1,6 @@
+<html>
+<form method="POST" action="search.php">
+  <input type="text" name="key" value="" size="50"></td>
+     <input type="submit" value="Search">
+</form>
+</html>

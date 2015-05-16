@@ -1,0 +1,31 @@
+	if(preg_match("/\*\//", $ln)==1)
+	{
+		$comment=false;
+		$t=preg_split("/\*\//",$ln);
+		$ln=$t[1];
+		$ns[$i]=$c.$t[0]."*/";
+				echo $c;
+
+		$c="";
+	}
+	if($comment)
+	{
+		$c=$c.$s[$i]."\r\n";
+		continue;
+	}
+	if(preg_match("/\/\*/", $ln)==1)
+	{
+		$comment=true;
+		$t=preg_split("/\/\*/",$ln);
+		$ln=$t[0];
+		$c="/*".$t[1]."\r\n";
+		if(preg_match("/\*\//", $c)==1)
+		{
+			$comment=false;
+			$t=preg_split("/\*\//",$c);
+			$ln=$t[1];
+			$ns[$i]=$c.$t[0]."*/";
+			$c="";
+		}
+	}
+	

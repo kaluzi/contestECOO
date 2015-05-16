@@ -1,0 +1,74 @@
+import java.io.*;
+import java.util.*;
+public class System {
+
+	 real x, y, z, m;
+}
+public class Test
+{
+
+
+static int f, n;
+
+
+
+static System sys, current;
+
+
+
+
+
+
+public static void main(String args[]) throws IOException
+{
+	
+	
+	
+	
+	
+	Scanner in= new Scanner( new FileInputStream(  "DATA11" ));
+	for( int c=1; c<5; c++)
+{
+	//undefined variable:  n
+	sys = loadSphere;
+	if ( n > 1 )
+{
+	    for( int i = 2 ; i < n; i ++)
+    {
+	        current = loadSphere;
+	        sys = addToSystem (sys, current);
+	    }
+	}
+	print(sys,c);
+	}
+	
+	
+}
+//  centre of gravity
+// create a record containing 4 variables
+// containing the 3D position and mass.
+// finds the resulting system, merging systems a and b
+public static  System addToSystem (  System a,  System  b  )
+{
+    System c;
+    c.x = (a.m * a.x + b.m * b.x) / (a.m + b.m)
+    c.y = (a.m * a.y + b.m * b.y) / (a.m + b.m)
+    c.z = (a.m * a.z + b.m * b.z) / (a.m + b.m)
+    c.m = a.m + b.m;
+    return c;
+}
+// read data into a system record
+public static  System loadSphere : System(  )
+{
+    System a;
+//undefined variable:  a.x//undefined variable:  a.y//undefined variable:  a.z//undefined variable:  a.m
+    return a;
+}
+// prints the result of one system()
+public static void  print (  System s , int i )
+{
+System.out.print(  "System "+i+" is centered about " );
+    System.out.println(  "("+ s.x +""+" "+ " , "+ s.y +""+" "+ " , "+ s.z +""+" "+ );
+        ") with mass ", s.m : 0 : 1;
+}
+}

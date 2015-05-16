@@ -1,0 +1,136 @@
+<?php include("headmenu.php"); ?>
+<?php
+	$x = $_REQUEST['x'];
+	$y = $_REQUEST['y'];
+	$year = $_REQUEST['year'];
+	$t = 0;
+	$temp1 = array();
+	include('common.php');
+	myconnect();
+	echo "<font face = \"verdana\">";
+
+       echo '<h1 align=center>Year - '.$year.'</h1>';
+	   echo '<table width=915px align=center>';
+	   
+	if (isset($year)){
+
+		echo '<tr>';
+		$sql_query = "SELECT * FROM `$year` ";
+		$result = mysql_query($sql_query ) or die ("cannot find $year");
+		for($i = 1; $row = mysql_fetch_array($result); $i++) {
+			$temp = $row['ctype'];
+			if (!in_array($temp,$temp1)){
+			$temp1[$t++] = $temp;
+
+		   echo "<td align=\"center\" bgcolor=\"#D7E6FC\"><h3><a style=\"color:#000000\" href=\"viewdata.php?y=$temp&year=$year\">" . $temp . "</a></h3></td>";
+		   }
+		}
+		echo '</tr>';
+		echo '</table>';
+		if (isset($y)){
+		echo '<table width=915px align=center>';
+			echo '<tr>';
+			$sql_query = "SELECT * FROM `$year` WHERE ctype='$y'";
+			$result = mysql_query($sql_query ) or die ("cannot find $year");
+			for($i = 1; $row = mysql_fetch_array($result); $i++) {
+				$temp = $row['title'];
+			   echo "<td align=\"center\" bgcolor=\"#2C3363\"><a style=\"color:#FFFFFF\" href=\"viewdata.php?y=$y&x=$temp&year=$year\">" . $temp . "</a></td>";
+			}
+			echo '</tr>';
+			echo'</table>';
+		
+			if (isset($x)){
+			echo '<table align = "center" border = "5" cellpadding = "10" width=915px>';
+				echo '<tr>';
+				$x = str_replace("'","&#39;",$x);
+				$sql_query = "SELECT * FROM `$year` WHERE title='$x'";
+				$result = mysql_query($sql_query ) or die ("cannot find $year");
+				$row = mysql_fetch_array($result);
+				echo "<td bgcolor=\"#061B36\">";
+				echo "<font color = \"#FFFFFF\"><h1 align = \"center\">" . $row['title'] . "</h1></font>";
+				echo "</td>";
+				echo "</tr>";
+				
+				echo "<tr>";
+				echo "<td bgcolor=\"#D9E1FA\">";
+				echo "<h2>Contest Type:</b> " . $row['ctype'] . "</h2>";
+				echo "<b>Problem Number:</b> " . $row['pn'];
+				echo "</td>";
+				echo "</tr>";
+				
+				echo "<tr>";
+				echo "<td>";
+				$temp = str_replace("'","\'",$row['prob']);
+				echo "<b>Description</b><br><br> " . $temp;
+				echo "<hr>";
+				
+				$temp = $row['solution'];
+				if (strlen(trim($temp)) != 0){
+					$temp3 = $row['lang'];
+					
+					echo "<b>Sample Solution in " . $temp3 . "</b><br><br>";
+					echo "<font face = \"Courier New\" size =\"2\">".$temp. "</font><br><br>";
+					
+					if ($temp3 == "Turing"){
+
+						echo"<h4>Translated to Java</h4>";
+						include "transsolutions.php";
+
+					}
+				
+				}else{
+					echo "<b>No solution given</b><br><br>";
+				}
+				echo "<hr>";
+				echo "</font>";
+				$temp = $row['input'];
+				if (strlen(trim($temp)) != 0){
+				echo "<font face = \"verdana\">";
+				echo "<b>Sample Input</b><br><font face = \"Courier New\" size =\"2\">" . $temp . "</font>";
+				}else{
+					echo "<b>No input given</b><br><br>";
+				}
+				echo"<hr>";
+echo '<h3> Comments </h3>';
+	$webname=$_REQUEST['webname'];
+	$sql_query = "SELECT * FROM `$year` WHERE title='$x'";
+	$result = mysql_query($sql_query ) or die ("cannot find $year");
+	$row = mysql_fetch_array($result);
+	$temp = $row['comm'];
+	echo $temp;
+	if (isset($_POST['sub'])){
+	$comment = $_REQUEST['comment']."<br><br><br>";
+	echo $comment;
+	$comment = $comment;
+	$sql_qy = "UPDATE `$year` SET ";
+	$sql_qy .= "comm = '$comment' ";
+	$sql_qy .= "WHERE title = '$x' ";
+	$result = mysql_query( $sql_qy ) or die("Update failed!!!");
+	}	
+	echo '<form action = "'.$webname.'?year='.$year.'&x='.$x.'&y='.$y.'&webname='.$webname.'" method = "POST">';
+	echo '<textarea name = "comment" rows="4" cols="50">Add in a comment</textarea>';
+	echo '<input type= "submit" name = "sub" value="Submit"><input type= "reset" value="Reset">';
+	echo '</form>';
+echo '</td></tr>';
+	
+echo '</table>';
+			}
+		}
+	}
+?>
+
+
+</td>
+  </tr>
+  <tr BGCOLOR=#FFFFFF ALIGN=CENTER>
+  <td colspan=2>
+  <BR><BR>
+  © Copyright Amy YU, Angel SHAO, Karen Luu and Lucy WANG 2013
+	<br>Site created on May 15th, 2013 //Last modified on June 3rd, 2013 
+  </td>
+  </TR>  
+</font>
+</table>
+
+</body>
+</html>

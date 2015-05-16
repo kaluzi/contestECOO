@@ -1,0 +1,6 @@
+<html>
+<form method="GET" action="dicerolls.php">
+  <input type="text" name="key" value="" size="50"></td>
+     <input type="submit" value="Search">
+</form>
+</html>

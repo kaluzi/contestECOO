@@ -1,0 +1,131 @@
+type triple :
+    record
+        x, y, z : int
+    end record
+var tunnel : array 0 .. 100 of triple
+var move : array 1 .. 100 of int
+var tunnelLen, sideCount : int
+var f : int
+var current : triple
+
+% read all the moves
+procedure readMoves
+    get : f, tunnelLen
+    for i : 1 .. tunnelLen
+        get : f, move (i)
+    end for
+end readMoves
+
+% update the current triple depending on moves code= 1..6
+procedure moveOne (code : int)
+    case code of
+        label 1 :
+            current.x += 1
+        label 2 :
+            current.y += 1
+        label 3 :
+            current.z += 1
+        label 4 :
+            current.x -= 1
+        label 5 :
+            current.y -= 1
+        label 6 :
+            current.z -= 1
+    end case
+end moveOne
+
+% update the entire tunnel
+procedure doTunnel
+    current.x := 0
+    current.y := 0
+    current.z := 0
+    tunnel (0) := current
+    for i : 1 .. tunnelLen
+        moveOne (move (i))
+        tunnel (i) := current
+    end for
+end doTunnel
+
+% true if current triple is touched by any previous triples
+% at position x (1..6)
+function touch (x, place : int) : boolean
+    var temp : triple := current
+
+    var t : boolean := false
+    case x of
+        label 1 :
+            temp.x += 1
+        label 2 :
+            temp.y += 1
+        label 3 :
+            temp.z += 1
+        label 4 :
+            temp.x -= 1
+        label 5 :
+            temp.y -= 1
+        label 6 :
+            temp.z -= 1
+    end case
+    for i : 0 .. place - 1
+        if (tunnel (i).x = temp.x)
+                and (tunnel (i).y = temp.y)
+                and (tunnel (i).z = temp.z)
+                then
+            t := true
+        end if
+    end for
+    result t
+end touch
+
+
+% calculate how many new sides are needed
+% number is between -6 and +4
+function addToCount (place : int) : int
+    var add : int := 6
+    var t : boolean
+    current := tunnel (place)
+    for k : 1 .. 6
+        t := false
+        for i : 0 .. place - 1
+            if touch (k, place) then
+                t := true
+            end if
+        end for
+        if t then
+            add -= 2
+        end if
+    end for
+    for i : 0 .. place - 1
+        if (tunnel (i).x = current.x)
+                and (tunnel (i).y = current.y)
+                and (tunnel (i).z = current.z)
+                then
+            add := 0
+        end if
+    end for
+    result add
+end addToCount
+
+procedure countSides
+    sideCount := 6
+%    put "first = ", sideCount
+    for i : 1 .. tunnelLen
+        sideCount += addToCount (i)
+%        put "after ", i, " it becomes: ", sideCount
+    end for
+end countSides
+
+
+
+%%%%%%%%%%%%%%% main program %%%%%%%%%%%
+open : f, "data42", get
+assert f > 0
+for c : 1 .. 5
+    readMoves
+    doTunnel
+    countSides
+    put "after ",tunnelLen," moves, the tunnel has ",sideCount, " sides."
+end for
+
+
+ 

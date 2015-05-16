@@ -1,0 +1,60 @@
+%  centre of gravity
+
+var f, n : int
+% create a record containing 4 variables
+% containing the 3D position and mass.
+type System :
+    record
+        x, y, z, m : real
+    end record
+var sys, current : System
+
+
+
+
+
+% finds the resulting system, merging systems a and b
+function addToSystem (a, b : System) : System
+    var c : System
+    c.x := (a.m * a.x + b.m * b.x) / (a.m + b.m)
+    c.y := (a.m * a.y + b.m * b.y) / (a.m + b.m)
+    c.z := (a.m * a.z + b.m * b.z) / (a.m + b.m)
+    c.m := a.m + b.m
+    result c
+end addToSystem
+
+
+
+
+
+% read data into a system record
+function loadSphere : System
+    var a : System
+    get : f, a.x, a.y, a.z, a.m
+    result a
+end loadSphere
+
+% prints the result of one system
+procedure print (s : System,i:int)
+put "System ",i," is centered about "..
+    put "(", s.x : 0 : 1, " , ", s.y : 0 : 1, " , ", s.z : 0 : 1,
+        ") with mass ", s.m : 0 : 1
+end print
+
+
+
+
+%%%%%%%%%%%%% main program %%%%%%%%%%%%%
+open: f , "DATA11", get
+for c:1..5
+get : f, n
+sys := loadSphere
+if n > 1 then
+    for i : 2 .. n
+        current := loadSphere
+        sys := addToSystem (sys, current)
+    end for
+end if
+print(sys,c)
+end for
+
